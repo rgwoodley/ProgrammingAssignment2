@@ -1,15 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Functions are use to process and optomize matix operations
+## makeCacheMatrix - Creates a specialized object for handling cached matrix
+## cacheSolve - Utilized the cached matrix object to retuen the solved matrix
 
-## Write a short comment describing this function
+## Function: makeCacheMatrix
+## Synposis: Create a cached matrix object
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  solvedCache <- NULL
+  set <- function (data) {
+    x = data
+    solvedCache <<- NULL
+  }
+  get <- function() x
+  setSolved <- function(solved) solvedCache <<- solved
+  getSolved <- function() solvedCache
+  list(set = set, get = get, setSolved = setSolved, getSolved = getSolved)
 }
 
 
-## Write a short comment describing this function
+## Function: cacheSolve
+## Synposis: Returns a cached version of the results or solves the matix using 'solve'
+##           and then setting the cached results.
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+  solved = x$getSolved()
+  if (!is.null(solved)) {
+    message("getting cached data")
+    return(solved)
+  }
+  data <- x$get()
+  solved <- solve(data, ...)
+  x$setSolved(solved)
+  solved
 }
